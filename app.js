@@ -28,7 +28,7 @@ app.get('/logfile', function(req, res){
   var numLines = 0;
 
   async.eachSeries(
-    ['/var/log/apache2/access_log'],
+    ['/var/log/apache2/access.log'],
     function(fileName, cb){
       var regex = /([(\d\.)]+) - - \[(.*?)\] "(.*?)" (\d+) - "(.*?)" "(.*?)"/
       fs.readFile(fileName, "utf-8", function(err, content){
@@ -61,9 +61,9 @@ app.get('/logfile', function(req, res){
             txtLength = txt.length;
           }
           else{
-            if(lines[i].search("122.171.124.95") < 0){
+            //if(lines[i].search("122.171.124.95") < 0){
               html += "<td>"+lines[i]+"</td>";
-            }
+            //}
           }
 
 
@@ -91,7 +91,7 @@ app.get('/logfile', function(req, res){
 
 io.on('connection', function(socket){
     console.log("socket connected");
-    fs.watch('/var/log/apache2/access_log', {encoding: 'buffer'}, function(eventString, fileName){
+    fs.watch('/var/log/apache2/access.log', {encoding: 'buffer'}, function(eventString, fileName){
       socket.emit(eventString, {});
       console.log(fileName);
     });
