@@ -61,7 +61,9 @@ app.get('/logfile', function(req, res){
             txtLength = txt.length;
           }
           else{
-            html += "<td>"+lines[i]+"</td>";
+            if(lines[i].search("122.171.124.95") < 0){
+              html += "<td>"+lines[i]+"</td>";
+            }
           }
 
 
