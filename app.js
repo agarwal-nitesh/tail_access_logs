@@ -112,7 +112,7 @@ io.on('connection', function(socket){
 });
 
 var host = 'localhost';
-var port = 8000;
+var port = 8080;
 http.listen(port, function(){
   console.log('listening on *:'+port);
 });
