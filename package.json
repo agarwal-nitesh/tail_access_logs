@@ -1,0 +1,21 @@
+{
+	"name": "tailLogFile",
+	"version": "0.0.1",
+	"description": "A simple nodejs app for tailing log file on browser",
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"express": "*",
+        "socket.io": "*",
+        "socket.io-client":"*",
+        "fs-reverse":"*",
+        "regex":"*",
+        "readline":"*",
+        "async":"*"
+	},
+	"engines": {
+		"node": "0.10.*"
+	},
+	"repository": {}
+}
