@@ -15,31 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-/*
-// var outstream = new stream;
-// outstream.readable = true;
-// outstream.writable = true;
 
-
-app.get('/', function(req, res){
-  var options = { flags: 'r', mode: 0666, bufferSize: 64 * 1024, matcher: /([(\d\.)]+) - - \[(.*?)\] "(.*?)" (\d+) - "(.*?)" "(.*?)"/ };
-  fsr('/var/log/apache2/access_log', options).pipe(res);
-});
-
-// function parseLogFile(outputs){
-//   var rd = readLine.createInterface({
-//     input: fs.createReadStream('/var/log/apache2/access_log'),
-//     output: outstream
-//   });
-
-//   var regex = /([(\d\.)]+) - - \[(.*?)\] "(.*?)" (\d+) - "(.*?)" "(.*?)"/
-
-//   rd.on('line', function(line) {
-//     rd.write(line);
-//     outputs();
-//   });
-// }
-*/
 
 app.get('/', function(req, res){
 
@@ -49,18 +25,29 @@ app.get('/', function(req, res){
 
 app.get('/logfile', function(req, res){
   var options = {flags:'r', bufferSize: 64*1024};
+  var numLines = 0;
 
   async.eachSeries(
     ['/var/log/apache2/access_log'],
     function(fileName, cb){
       var regex = /([(\d\.)]+) - - \[(.*?)\] "(.*?)" (\d+) - "(.*?)" "(.*?)"/
       fs.readFile(fileName, "utf-8", function(err, content){
-
+        var IPS = "";
+        // var distinctIPRegex = /[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/;
+        // var IPS = content.match(distinctIPRegex);
+        // console.log(IPS);
+        // var iphtml = "";
+        // if(IPS){
+        //   for(var i=0;i<IPS.length-1;i++){
+        //     iphtml+="<p>"+IPS[i+1]+"</p>";
+        //   }
+        // }
         var lines = content.split("\n");
         var html = "<table>";
         var lineLength = 0;
         if(lines){
           lineLength = lines.length;
+          numLines+=lineLength;
         }
         else{
           html += lines;
@@ -93,6 +80,8 @@ app.get('/logfile', function(req, res){
       });
     },
     function(err) {
+      var numLinesHTML = "<h3>"+"NUMBER OF HITS = "+numLines+"</h3>";
+      res.write(numLinesHTML);
       res.end();
     }
   )
